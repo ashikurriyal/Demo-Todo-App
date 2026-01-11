@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { ITask } from "@/types";
+import type { RootState } from "@/redux/store";
 
 interface InitialState {
-    task: ITask[];
+    tasks: ITask[];
 }
 
 const initialState : InitialState = {
-  task: [
+  tasks: [
     {
       id: "t001",
       title: "Initialize Frontend",
@@ -32,4 +33,7 @@ const taskSlice = createSlice({
   reducers: {},
 });
 
+export const selectTasks = (state: RootState) => {
+    return state.todo.tasks
+}
 export default taskSlice.reducer;
