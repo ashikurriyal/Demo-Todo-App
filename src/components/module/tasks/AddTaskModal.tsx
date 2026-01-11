@@ -24,6 +24,8 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { addTask } from "@/redux/features/task/taskSlice";
+import { useAppDispatch } from "@/redux/hook";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -31,8 +33,11 @@ import { useForm } from "react-hook-form";
 
 export function AddTaskModal() {
   const form = useForm();
+  const dispatch = useAppDispatch();
+
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(addTask(data))
   };
   return (
     <Dialog>
