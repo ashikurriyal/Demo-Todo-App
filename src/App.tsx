@@ -1,11 +1,10 @@
 import "./App.css";
-import { Button } from "./components/ui/button";
+import Navbar from "./components/ui/layout/Navbar";
 
 function App() {
   return (
     <>
-      <h1 className="font-bold text-3xl ">Basic Todo App</h1>
-      <Button>Test Button</Button>
+      <Navbar></Navbar>
     </>
   );
 }
