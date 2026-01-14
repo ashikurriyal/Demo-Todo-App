@@ -45,7 +45,7 @@ export function AddTaskModal() {
       <DialogTrigger asChild>
         <Button>Add Task</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
         </DialogHeader>
@@ -89,7 +89,7 @@ export function AddTaskModal() {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Priority Level of the task"></SelectValue>
                       </SelectTrigger>
                     </FormControl>
