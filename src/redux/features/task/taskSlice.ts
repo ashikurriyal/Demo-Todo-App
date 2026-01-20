@@ -3,50 +3,76 @@ import type { ITask } from "@/types";
 import type { RootState } from "@/redux/store";
 
 interface InitialState {
-    tasks: ITask[];
+  tasks: ITask[];
+  filter: "all" | "low" | "medium" | "high";
 }
 
-const initialState : InitialState = {
+const initialState: InitialState = {
   tasks: [
-    // {
-    //   id: "t001",
-    //   title: "Initialize Frontend",
-    //   description: "Create Home page and routing",
-    //   dueDate: "2026-11",
-    //   isCompleted: false,
-    //   priority: "High",
-    // },
-    // {
-    //   id: "t002",
-    //   title: "Github Collab",
-    //   description: "Create github repo and initializing",
-    //   dueDate: "2026-11",
-    //   isCompleted: false,
-    //   priority: "Low",
-    // },
+    {
+      id: "ttodo0001",
+      title: "Task Alpha",
+      description: "This is a demo description for task alpha",
+      priority: "medium",
+      dueDate: "2026-01-14T18:00:00.000Z",
+      isCompleted: false,
+    },
+    {
+      id: "ttodo00012",
+      title: "Task Gama",
+      description: "This is a demo description for task gama",
+      priority: "high",
+      dueDate: "2026-01-14T18:00:00.000Z",
+      isCompleted: true,
+    },
   ],
+  filter: "all"
 };
 
-type DarftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">
+type DarftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
 
-const createTask = (taskData: DarftTask) : ITask => {
-    return {id: nanoid(), isCompleted: false, ...taskData}
-}
+const createTask = (taskData: DarftTask): ITask => {
+  return { id: nanoid(), isCompleted: false, ...taskData };
+};
 
 const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-    addTask: (state, action : PayloadAction <DarftTask>) => {
-        const taskData = createTask(action.payload)
-        state.tasks.push(taskData)
+
+    //add task 
+    addTask: (state, action: PayloadAction<DarftTask>) => {
+      const taskData = createTask(action.payload);
+      state.tasks.push(taskData);
+    },
+
+    //toggle switch based on task complete
+    toggleCompleteState: (state, action: PayloadAction<string>) => {
+      console.log(action);
+      state.tasks.forEach((task) =>
+        task.id == action.payload
+          ? (task.isCompleted = !task.isCompleted)
+          : task,
+      );
+    },
+
+    //dalete reducer
+
+    deleteTask: (state, action: PayloadAction<string>) => {
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+    },
+
+    //update filter
+    updateFilter : (state, action: PayloadAction<"low"|"medium"|"high">) => {
+      state.filter = action.payload;
+
     }
   },
 });
 
 export const selectTasks = (state: RootState) => {
-    return state.todo.tasks
-}
+  return state.todo.tasks;
+};
 
-export const {addTask} = taskSlice.actions;
+export const { addTask, toggleCompleteState, deleteTask } = taskSlice.actions;
 export default taskSlice.reducer;
