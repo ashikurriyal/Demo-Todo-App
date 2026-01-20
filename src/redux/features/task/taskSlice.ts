@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction, nanoid } from "@reduxjs/toolkit";
 import type { ITask } from "@/types";
 import type { RootState } from "@/redux/store";
+import { removeUser } from "../user/userSlice";
 
 interface InitialState {
   tasks: ITask[];
@@ -16,31 +17,42 @@ const initialState: InitialState = {
       priority: "medium",
       dueDate: "2026-01-14T18:00:00.000Z",
       isCompleted: false,
+      assignedTo: null,
     },
-    {
-      id: "ttodo00012",
-      title: "Task Gama",
-      description: "This is a demo description for task gama",
-      priority: "high",
-      dueDate: "2026-01-14T18:00:00.000Z",
-      isCompleted: true,
-    },
-    {
-      id: "ttodo000123",
-      title: "Task Gama",
-      description: "This is a demo description for task gama",
-      priority: "low",
-      dueDate: "2026-01-14T18:00:00.000Z",
-      isCompleted: false,
-    },
+    // {
+    //   id: "ttodo00012",
+    //   title: "Task Gama",
+    //   description: "This is a demo description for task gama",
+    //   priority: "high",
+    //   dueDate: "2026-01-14T18:00:00.000Z",
+    //   isCompleted: true,
+    //   assignedTo: null,
+    // },
+    // {
+    //   id: "ttodo000123",
+    //   title: "Task Gama",
+    //   description: "This is a demo description for task gama",
+    //   priority: "low",
+    //   dueDate: "2026-01-14T18:00:00.000Z",
+    //   isCompleted: false,
+    //   assignedTo: null,
+    // },
   ],
   filter: "all",
 };
 
-type DarftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
+type DarftTask = Pick<
+  ITask,
+  "title" | "description" | "dueDate" | "priority" | "assignedTo"
+>;
 
 const createTask = (taskData: DarftTask): ITask => {
-  return { id: nanoid(), isCompleted: false, ...taskData };
+  return {
+    ...taskData,
+    id: nanoid(),
+    isCompleted: false,
+    assignedTo: taskData.assignedTo ? taskData.assignedTo : null,
+  };
 };
 
 const taskSlice = createSlice({
@@ -76,6 +88,13 @@ const taskSlice = createSlice({
     ) => {
       state.filter = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(removeUser, (state, action) => {
+      state.tasks.forEach((task) =>
+        task.assignedTo === action.payload ? (task.assignedTo = null) : task,
+      );
+    });
   },
 });
 
