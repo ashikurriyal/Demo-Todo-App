@@ -25,8 +25,16 @@ const initialState: InitialState = {
       dueDate: "2026-01-14T18:00:00.000Z",
       isCompleted: true,
     },
+    {
+      id: "ttodo000123",
+      title: "Task Gama",
+      description: "This is a demo description for task gama",
+      priority: "low",
+      dueDate: "2026-01-14T18:00:00.000Z",
+      isCompleted: false,
+    },
   ],
-  filter: "all"
+  filter: "all",
 };
 
 type DarftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
@@ -39,8 +47,7 @@ const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
-
-    //add task 
+    //add task
     addTask: (state, action: PayloadAction<DarftTask>) => {
       const taskData = createTask(action.payload);
       state.tasks.push(taskData);
@@ -63,16 +70,28 @@ const taskSlice = createSlice({
     },
 
     //update filter
-    updateFilter : (state, action: PayloadAction<"low"|"medium"|"high">) => {
+    updateFilter: (
+      state,
+      action: PayloadAction<"all" | "low" | "medium" | "high">,
+    ) => {
       state.filter = action.payload;
-
-    }
+    },
   },
 });
 
 export const selectTasks = (state: RootState) => {
-  return state.todo.tasks;
+  const filter = state.todo.filter;
+  if (filter === "low") {
+    return state.todo.tasks.filter((task) => task.priority === "low");
+  } else if (filter === "medium") {
+    return state.todo.tasks.filter((task) => task.priority === "medium");
+  } else if (filter === "high") {
+    return state.todo.tasks.filter((task) => task.priority === "high");
+  } else {
+    return state.todo.tasks;
+  }
 };
 
-export const { addTask, toggleCompleteState, deleteTask } = taskSlice.actions;
+export const { addTask, toggleCompleteState, deleteTask, updateFilter } =
+  taskSlice.actions;
 export default taskSlice.reducer;
