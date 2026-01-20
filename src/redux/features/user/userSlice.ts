@@ -3,33 +3,42 @@ import type { IUser } from "@/types";
 import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
 
 interface InitialState {
-    users: IUser[];
+  users: IUser[];
 }
 
 const initialState: InitialState = {
-    users: []
-}
+  users: [
+    {
+      id: "99d_8pa98wkpIJI6_FkDE",
+      name: "Riyal",
+    },
+    {
+      id: "99d_8a985wkpIlI6_FpDE",
+      name: "Mubin",
+    },
+  ],
+};
 
 type DarftUser = Pick<IUser, "name">;
 
 const createUser = (userData: DarftUser): IUser => {
-    return {id: nanoid(), ...userData}
-}
+  return { id: nanoid(), ...userData };
+};
 
 const userSlice = createSlice({
-    name: "user",
-    initialState: initialState,
-    reducers: {
-        addUser: (state, action: PayloadAction <DarftUser>) => {
-            const userData = createUser(action.payload);
-            state.users.push(userData);
-        },
-        removeUser: (state, actions: PayloadAction <string>) => {
-            state.users = state.users.filter((user) => user.id !== actions.payload)
-        }
-    }
+  name: "user",
+  initialState: initialState,
+  reducers: {
+    addUser: (state, action: PayloadAction<DarftUser>) => {
+      const userData = createUser(action.payload);
+      state.users.push(userData);
+    },
+    removeUser: (state, actions: PayloadAction<string>) => {
+      state.users = state.users.filter((user) => user.id !== actions.payload);
+    },
+  },
 });
 
 export const selectUsers = (state: RootState) => state.user.users;
-export const {addUser, removeUser} = userSlice.actions;
+export const { addUser, removeUser } = userSlice.actions;
 export default userSlice.reducer;
