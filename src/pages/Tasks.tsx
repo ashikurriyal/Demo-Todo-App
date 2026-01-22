@@ -6,7 +6,12 @@ import type { ITask } from "@/types";
 
 
 export default function Tasks() {
-  const {data, isLoading} = useGetTasksQuery(undefined);
+  const {data, isLoading} = useGetTasksQuery(undefined, {
+    pollingInterval: 30000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
 
   console.log({data, isLoading})
 
